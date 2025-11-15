@@ -12,6 +12,9 @@ const selector = (state) => ({
     edges: state.edges,
 });
 
+// Get API URL from environment variable
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 export const SubmitButton = ({ minimal = false }) => {
     const { nodes, edges } = useStore(selector, shallow);
     const [loading, setLoading] = useState(false);
@@ -20,7 +23,7 @@ export const SubmitButton = ({ minimal = false }) => {
         if (loading) return; // prevent double clicks
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8000/pipelines/parse', {
+            const res = await fetch(`${API_URL}/pipelines/parse`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,35 +31,35 @@ export const SubmitButton = ({ minimal = false }) => {
                 body: JSON.stringify({ nodes, edges })
             });
 
-                    if (!res.ok) {
-                        const text = await res.text();
-                        toast.error(`Submit failed (${res.status}): ${text || res.statusText}`);
-                        setLoading(false);
-                        return;
-                    }
+            if (!res.ok) {
+                const text = await res.text();
+                toast.error(`Submit failed (${res.status}): ${text || res.statusText}`);
+                setLoading(false);
+                return;
+            }
 
-                    const data = await res.json();
-                    const isDagStr = data.is_dag ? 'DAG ✓' : 'Cycle detected ✕';
-                    toast.success(`Pipeline parsed: ${data.num_nodes} nodes · ${data.num_edges} edges · ${isDagStr}`);
+            const data = await res.json();
+            const isDagStr = data.is_dag ? 'DAG ✓' : 'Cycle detected ✕';
+            toast.success(`Pipeline parsed: ${data.num_nodes} nodes · ${data.num_edges} edges · ${isDagStr}`);
         } catch (err) {
-                    toast.error(`Network error: ${err}`);
+            toast.error(`Network error: ${err}`);
         } finally {
             setLoading(false);
         }
     }, [nodes, edges, loading]);
 
-            if (minimal) {
-                return (
-                    <button className="submit-btn" style={{padding: '.55rem .9rem'}} type="button" onClick={handleSubmit} disabled={loading}>
-                        {loading ? 'Submitting…' : 'Submit'}
-                    </button>
-                );
-            }
-            return (
-                <div className="submit-wrapper">
-                    <button className="submit-btn" type="button" onClick={handleSubmit} disabled={loading}>
-                        {loading ? 'Submitting…' : 'Submit Pipeline'}
-                    </button>
-                </div>
-            );
+    if (minimal) {
+        return (
+            <button className="submit-btn" style={{padding: '.55rem .9rem'}} type="button" onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Submitting…' : 'Submit'}
+            </button>
+        );
+    }
+    return (
+        <div className="submit-wrapper">
+            <button className="submit-btn" type="button" onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Submitting…' : 'Submit Pipeline'}
+            </button>
+        </div>
+    );
 };
