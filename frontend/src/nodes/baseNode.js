@@ -1,6 +1,6 @@
 // BaseNode.js
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { useStore } from '../store';
 
@@ -46,33 +46,62 @@ const Field = ({ id, nodeId, field, value, onChange }) => {
     id: `${nodeId}-${field.name}`,
     name: field.name,
     value: value ?? '',
-    onChange: (e) => onChange(field.name, field.type === 'checkbox' ? e.target.checked : e.target.value),
     style: { width: '100%' },
   };
+
+  // Auto-resize textarea
+  if (field.type === 'textarea') {
+    return (
+      <label htmlFor={`${nodeId}-${field.name}`} style={{ display: 'grid', gap: 4 }}>
+        <span style={{ color: 'var(--text)', fontSize: 12, fontWeight: 500 }}>{field.label}</span>
+        <TextareaAutoResize
+          {...common}
+          onChange={(e) => {
+            e.target.style.height = 'auto';
+            e.target.style.height = e.target.scrollHeight + 'px';
+            onChange(field.name, e.target.value);
+          }}
+        />
+      </label>
+    );
+  }
 
   return (
     <label htmlFor={`${nodeId}-${field.name}`} style={{ display: 'grid', gap: 4 }}>
       <span style={{ color: 'var(--text)', fontSize: 12, fontWeight: 500 }}>{field.label}</span>
       {field.type === 'select' ? (
-        <select {...common}>
+        <select {...common} onChange={(e) => onChange(field.name, e.target.value)}>
           {(field.options || []).map((opt) => (
             <option key={String(opt)} value={opt}>
               {String(opt)}
             </option>
           ))}
         </select>
-      ) : field.type === 'textarea' ? (
-        <textarea {...common} rows={3} />
       ) : field.type === 'number' ? (
-        <input {...common} type="number" />
+        <input {...common} type="number" onChange={(e) => onChange(field.name, e.target.value)} />
       ) : field.type === 'checkbox' ? (
-        <input id={`${nodeId}-${field.name}`} name={field.name} type="checkbox" checked={!!value} onChange={common.onChange} />
+        <input id={`${nodeId}-${field.name}`} name={field.name} type="checkbox" checked={!!value} onChange={(e) => onChange(field.name, e.target.checked)} />
       ) : (
-        <input {...common} type="text" />
+        <input {...common} type="text" onChange={(e) => onChange(field.name, e.target.value)} />
       )}
     </label>
   );
-};
+}
+
+// Textarea component with auto-resize
+function TextareaAutoResize(props) {
+  const { value, ...rest } = props;
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.style.height = 'auto';
+      ref.current.style.height = ref.current.scrollHeight + 'px';
+    }
+  }, [value]);
+
+  return <textarea ref={ref} rows={1} value={value} {...rest} />;
+}
 
 // Base node capable of rendering fields and handles from config
 export const BaseNode = ({ id, data, title, description, fields = [], handles = [], style = {} }) => {
