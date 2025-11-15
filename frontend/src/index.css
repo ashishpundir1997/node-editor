@@ -1,38 +1,20 @@
-import { PipelineToolbar } from './toolbar';
-import { PipelineUI } from './ui';
-import { SubmitButton } from './submit';
-import { Toaster } from 'react-hot-toast';
+/* index.css: global overrides & optional helper classes */
+/* Tailwind directives live in input.css which is built to output.css */
 
-function App() {
-  return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Toast Notifications */}
-      <Toaster position="top-right" />
-      
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-sm">
-              <span className="text-xl">⚡</span>
-            </div>
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Workflow Builder
-            </h1>
-          </div>
-          <SubmitButton />
-        </div>
-      </header>
-
-      {/* Toolbar */}
-      <PipelineToolbar />
-
-      {/* Main Canvas */}
-      <div className="flex-1 relative overflow-hidden">
-        <PipelineUI />
-      </div>
-    </div>
-  );
+html, body, #root {
+  height: 100%;
 }
 
-export default App;
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.fade-in { animation: fade-in 200ms ease-in; }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
