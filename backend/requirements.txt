@@ -1,0 +1,4 @@
+# Python requirements for backend
+# Add your dependencies below
+fastapi
+uvicorn
