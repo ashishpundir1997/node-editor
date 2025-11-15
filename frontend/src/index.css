@@ -1,5 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* index.css: global overrides & optional helper classes */
-/* Tailwind directives live in input.css which is built to output.css */
+/* Tailwind directives in same file (no separate build step) */
 
 html, body, #root {
   height: 100%;

@@ -3,7 +3,6 @@ import { BaseNode } from './baseNode';
 import { Position } from 'reactflow';
 
 export const TextNode = ({ id, data }) => {
-  const defaultName = id.replace('customInput-', 'input_');
 
   // State for text, node height and width
   const [text, setText] = useState(data?.inputName || '');
@@ -31,7 +30,7 @@ export const TextNode = ({ id, data }) => {
   // ...existing code...
 
   // Auto-resize node height and width based on textarea content
-  const resizeNode = () => {
+  const resizeNode = useCallback(() => {
     const el = textareaRef.current;
     if (el) {
       el.style.height = 'auto';
@@ -53,11 +52,11 @@ export const TextNode = ({ id, data }) => {
       const newWidth = Math.max(220, Math.min(600, estimatedWidth));
       setNodeWidth(newWidth);
     }
-  };
+  }, [variables]);
 
   useEffect(() => {
     resizeNode();
-  }, [text]);
+  }, [text, resizeNode]);
 
   const handleDataChange = useCallback((key, value) => {
     if (key === 'inputName') {
