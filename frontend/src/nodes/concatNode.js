@@ -1,21 +1,21 @@
-// mathNode.js
+// concatNode.js
 
 import { BaseNode } from './baseNode';
 
-export const MathNode = ({ id, data }) => {
+export const ConcatNode = ({ id, data }) => {
   return (
     <BaseNode
       id={id}
       data={data}
-      title="Math"
-      description="Apply a binary operation"
+      title="Concat"
+      description="Concatenate two strings with a separator"
       fields={[
-        { type: 'select', name: 'op', label: 'Operation', options: ['add', 'sub', 'mul', 'div'], default: 'add' },
+        { type: 'text', name: 'separator', label: 'Separator', default: ' ' },
       ]}
       handles={[
         { type: 'target', position: 'Left', id: 'a', style: { top: '35%' } },
         { type: 'target', position: 'Left', id: 'b', style: { top: '65%' } },
-        { type: 'source', position: 'Right', id: 'result' },
+        { type: 'source', position: 'Right', id: 'out' },
       ]}
     />
   );

@@ -1,5 +1,6 @@
+// llmNode.js
+
 import { BaseNode } from './baseNode';
-import { Position } from 'reactflow';
 
 export const LLMNode = ({ id, data }) => {
   return (
@@ -7,17 +8,17 @@ export const LLMNode = ({ id, data }) => {
       id={id}
       data={data}
       title="LLM"
+      description="Large Language Model"
       fields={[
-        { key: 'model', label: 'Model', type: 'select', options: [
-          { value: 'gpt-4' }, { value: 'gpt-4o-mini' }, { value: 'gpt-3.5-turbo' }
-        ], defaultValue: data?.model || 'gpt-4' },
-        { key: 'temperature', label: 'Temp', type: 'number', min: 0, max: 2, step: 0.1, defaultValue: data?.temperature || 0.7 },
-        { key: 'prompt', label: 'Prompt', type: 'textarea', rows: 3, placeholder: 'Enter prompt with {{variables}}', defaultValue: data?.prompt || '' }
+        { type: 'textarea', name: 'system', label: 'System prompt', default: '' },
+        { type: 'textarea', name: 'prompt', label: 'User prompt', default: '' },
       ]}
+      style={{ minHeight: 180 }}
       handles={[
-        { type: 'target', position: Position.Left, id: `${id}-in` },
-        { type: 'source', position: Position.Right, id: `${id}-out` }
+        { type: 'target', position: 'Left', id: 'system', style: { top: 70, zIndex: 2 } },
+        { type: 'target', position: 'Left', id: 'prompt', style: { top: 130, zIndex: 2 } },
+        { type: 'source', position: 'Right', id: 'response', style: { top: 100, zIndex: 2 } },
       ]}
     />
   );
-};
+}

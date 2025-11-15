@@ -1,5 +1,6 @@
+// outputNode.js
+
 import { BaseNode } from './baseNode';
-import { Position } from 'reactflow';
 
 export const OutputNode = ({ id, data }) => {
   return (
@@ -8,11 +9,23 @@ export const OutputNode = ({ id, data }) => {
       data={data}
       title="Output"
       fields={[
-        { key: 'label', label: 'Label', type: 'text', placeholder: 'Output label', defaultValue: data?.label || '' }
+        {
+          type: 'text',
+          name: 'outputName',
+          label: 'Name',
+          default: ({ id }) => id.replace('customOutput-', 'output_'),
+        },
+        {
+          type: 'select',
+          name: 'outputType',
+          label: 'Type',
+          options: ['Text', 'Image'],
+          default: 'Text',
+        },
       ]}
       handles={[
-        { type: 'target', position: Position.Left, id: `${id}-in` }
+        { type: 'target', position: 'Left', id: 'value' },
       ]}
     />
   );
-};
+}

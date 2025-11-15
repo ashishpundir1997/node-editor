@@ -1,5 +1,6 @@
+// delayNode.js
+
 import { BaseNode } from './baseNode';
-import { Position } from 'reactflow';
 
 export const DelayNode = ({ id, data }) => {
   return (
@@ -7,12 +8,13 @@ export const DelayNode = ({ id, data }) => {
       id={id}
       data={data}
       title="Delay"
+      description="Delay passing the value"
       fields={[
-        { key: 'milliseconds', label: 'ms', type: 'number', min: 0, max: 600000, step: 100, defaultValue: data?.milliseconds || 1000 }
+        { type: 'number', name: 'ms', label: 'Milliseconds', default: 1000 },
       ]}
       handles={[
-        { type: 'target', position: Position.Left, id: `${id}-in` },
-        { type: 'source', position: Position.Right, id: `${id}-out` }
+        { type: 'target', position: 'Left', id: 'in' },
+        { type: 'source', position: 'Right', id: 'out' },
       ]}
     />
   );

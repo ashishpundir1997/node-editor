@@ -10,11 +10,11 @@ import { InputNode } from './nodes/inputNode';
 import { LLMNode } from './nodes/llmNode';
 import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
+import { ConcatNode } from './nodes/concatNode';
 import { MathNode } from './nodes/mathNode';
-import { APICallNode } from './nodes/apiCallNode';
-import { FilterNode } from './nodes/filterNode';
 import { DelayNode } from './nodes/delayNode';
-import { LoggerNode } from './nodes/loggerNode';
+import { HttpNode } from './nodes/httpNode';
+import { SplitNode } from './nodes/splitNode';
 
 import 'reactflow/dist/style.css';
 
@@ -25,12 +25,11 @@ const nodeTypes = {
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
+  concat: ConcatNode,
   math: MathNode,
-  apiCall: APICallNode,
-  filter: FilterNode,
   delay: DelayNode,
-  logger: LoggerNode,
-
+  http: HttpNode,
+  split: SplitNode,
 };
 
 const selector = (state) => ({
@@ -91,7 +90,7 @@ export const PipelineUI = () => {
             addNode(newNode);
           }
         },
-        [reactFlowInstance, getNodeID, addNode]
+    [reactFlowInstance, addNode, getNodeID]
     );
 
     const onDragOver = useCallback((event) => {
@@ -101,11 +100,7 @@ export const PipelineUI = () => {
 
     return (
         <>
-        <div ref={reactFlowWrapper} style={{
-            width: '100%', 
-            height: '100%',
-            background: 'hsl(210 40% 98%)',
-        }}>
+        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -119,39 +114,10 @@ export const PipelineUI = () => {
                 proOptions={proOptions}
                 snapGrid={[gridSize, gridSize]}
                 connectionLineType='smoothstep'
-                defaultEdgeOptions={{
-                    type: 'smoothstep',
-                    animated: true,
-                    style: { stroke: 'hsl(221.2 83.2% 53.3%)', strokeWidth: 2 },
-                }}
             >
-                <Background 
-                    color="hsl(215 20.2% 85.1%)" 
-                    gap={gridSize} 
-                    style={{ background: 'hsl(0 0% 100%)' }}
-                />
+                <Background color="#aaa" gap={gridSize} />
                 <Controls />
-                <MiniMap 
-                    nodeColor={(node) => {
-                        const colors = {
-                            customInput: '#3b82f6',
-                            llm: '#8b5cf6',
-                            customOutput: '#10b981',
-                            text: '#f59e0b',
-                            math: '#ec4899',
-                            apiCall: '#06b6d4',
-                            filter: '#84cc16',
-                            delay: '#f97316',
-                            logger: '#6366f1',
-                        };
-                        return colors[node.type] || '#64748b';
-                    }}
-                    style={{
-                        background: 'hsl(0 0% 100%)',
-                        border: '1px solid hsl(214.3 31.8% 91.4%)',
-                    }}
-                    maskColor="rgba(0, 0, 0, 0.05)"
-                />
+                <MiniMap />
             </ReactFlow>
         </div>
         </>
