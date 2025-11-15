@@ -5,13 +5,14 @@
 import { useCallback, useState } from 'react';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
+import { toast } from 'react-toastify';
 
 const selector = (state) => ({
     nodes: state.nodes,
     edges: state.edges,
 });
 
-export const SubmitButton = () => {
+export const SubmitButton = ({ minimal = false }) => {
     const { nodes, edges } = useStore(selector, shallow);
     const [loading, setLoading] = useState(false);
 
@@ -27,28 +28,35 @@ export const SubmitButton = () => {
                 body: JSON.stringify({ nodes, edges })
             });
 
-            if (!res.ok) {
-                const text = await res.text();
-                alert(`Pipeline submit failed: ${res.status} ${res.statusText}\n${text}`);
-                setLoading(false);
-                return;
-            }
+                    if (!res.ok) {
+                        const text = await res.text();
+                        toast.error(`Submit failed (${res.status}): ${text || res.statusText}`);
+                        setLoading(false);
+                        return;
+                    }
 
-            const data = await res.json();
-            const isDagStr = data.is_dag ? 'Yes' : 'No';
-            alert(`Pipeline parsed successfully:\nNodes: ${data.num_nodes}\nEdges: ${data.num_edges}\nIs DAG: ${isDagStr}`);
+                    const data = await res.json();
+                    const isDagStr = data.is_dag ? 'DAG ✓' : 'Cycle detected ✕';
+                    toast.success(`Pipeline parsed: ${data.num_nodes} nodes · ${data.num_edges} edges · ${isDagStr}`);
         } catch (err) {
-            alert(`Network error submitting pipeline: ${err}`);
+                    toast.error(`Network error: ${err}`);
         } finally {
             setLoading(false);
         }
     }, [nodes, edges, loading]);
 
-    return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1rem' }}>
-            <button type="button" onClick={handleSubmit} disabled={loading}>
-                {loading ? 'Submitting...' : 'Submit Pipeline'}
-            </button>
-        </div>
-    );
+            if (minimal) {
+                return (
+                    <button className="submit-btn" style={{padding: '.55rem .9rem'}} type="button" onClick={handleSubmit} disabled={loading}>
+                        {loading ? 'Submitting…' : 'Submit'}
+                    </button>
+                );
+            }
+            return (
+                <div className="submit-wrapper">
+                    <button className="submit-btn" type="button" onClick={handleSubmit} disabled={loading}>
+                        {loading ? 'Submitting…' : 'Submit Pipeline'}
+                    </button>
+                </div>
+            );
 };

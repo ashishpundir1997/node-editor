@@ -8,10 +8,10 @@ import { useStore } from '../store';
 const baseCardStyle = {
   width: 220,
   minHeight: 90,
-  border: '1px solid #1C2536',
-  borderRadius: 8,
-  background: '#fff',
-  boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
+  border: '1px solid var(--border)',
+  borderRadius: 'var(--radius)',
+  background: 'var(--bg-alt)',
+  boxShadow: 'var(--shadow-sm)',
   fontSize: 12,
   position: 'relative',
   overflow: 'visible',
@@ -19,10 +19,10 @@ const baseCardStyle = {
 
 const headerStyle = {
   padding: '6px 10px',
-  background: '#1C2536',
+  background: 'var(--primary)',
   color: '#fff',
-  borderTopLeftRadius: 8,
-  borderTopRightRadius: 8,
+  borderTopLeftRadius: 'var(--radius)',
+  borderTopRightRadius: 'var(--radius)',
   fontWeight: 600,
 };
 
@@ -97,10 +97,10 @@ export const BaseNode = ({ id, data, title, description, fields = [], handles = 
   };
 
   const defaultHandleStyle = {
-    width: 12,
-    height: 12,
-    background: '#1C2536',
-    border: '2px solid #fff',
+  width: 12,
+  height: 12,
+  background: 'var(--primary)',
+  border: '2px solid #fff',
   };
 
   return (
