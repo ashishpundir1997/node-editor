@@ -27,8 +27,8 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"build:css": "tailwindcss -i ./src/input.css -o ./src/output.css",
-		"watch:css": "tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "build:css": "echo 'Tailwind v4 in PostCSS pipeline; build:css not required'",
+    "watch:css": "echo 'Use npm start (CRA handles CSS rebuild)'",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},
