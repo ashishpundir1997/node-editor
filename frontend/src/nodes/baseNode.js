@@ -52,7 +52,7 @@ const Field = ({ id, nodeId, field, value, onChange }) => {
 
   return (
     <label htmlFor={`${nodeId}-${field.name}`} style={{ display: 'grid', gap: 4 }}>
-      <span style={{ color: '#334155', fontSize: 12 }}>{field.label}</span>
+      <span style={{ color: 'var(--text)', fontSize: 12, fontWeight: 500 }}>{field.label}</span>
       {field.type === 'select' ? (
         <select {...common}>
           {(field.options || []).map((opt) => (
@@ -110,7 +110,7 @@ export const BaseNode = ({ id, data, title, description, fields = [], handles = 
       </div>
       <div style={bodyStyle}>
         {description ? (
-          <div style={{ color: '#475569' }}>{description}</div>
+          <div style={{ color: 'var(--text-dim)', fontSize: 12 }}>{description}</div>
         ) : null}
         {fields.map((f) => (
           <Field key={f.name} id={id} nodeId={id} field={f} value={data?.[f.name]} onChange={onFieldChange} />
