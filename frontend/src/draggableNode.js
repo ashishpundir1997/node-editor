@@ -1,5 +1,19 @@
 // draggableNode.js
 
+// Icon mapping for different node types
+const nodeIcons = {
+  'customInput': '📥',
+  'llm': '🤖',
+  'customOutput': '📤',
+  'text': '📝',
+  'concat': '🔗',
+  'math': '🔢',
+  'delay': '⏱️',
+  'split': '✂️',
+  'http': '🌐',
+  'uppercase': '🔠'
+};
+
 export const DraggableNode = ({ type, label }) => {
   const onDragStart = (event, nodeType) => {
     const appData = { nodeType };
@@ -7,6 +21,8 @@ export const DraggableNode = ({ type, label }) => {
     event.dataTransfer.setData('application/reactflow', JSON.stringify(appData));
     event.dataTransfer.effectAllowed = 'move';
   };
+
+  const icon = nodeIcons[type] || '⚙️';
 
   return (
     <div
@@ -16,7 +32,10 @@ export const DraggableNode = ({ type, label }) => {
       draggable
       title={`Drag to canvas: ${label}`}
     >
-      <span>{label}</span>
+      <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+        <span style={{ fontSize: '0.9em' }}>{icon}</span>
+        <span>{label}</span>
+      </span>
     </div>
   );
 };
